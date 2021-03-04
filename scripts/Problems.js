@@ -1777,4 +1777,4 @@ const problemArr =[[1, 'Two Sum', 'Easy', 1, 4650],
 [318, 'Maximum Product of Word Lengths', 'Medium', 1776, 5230],
 [294, 'Flip Game II', 'Medium', 1777, 5070]]
 
-export default problemArr
+module.exports = problemArr

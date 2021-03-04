@@ -1,7 +1,9 @@
+const problemArr = require('./Problems')
 const {Client} = require('pg')
 const client = new Client({
     database: 'algos',
 })
+const seed = async () => {
 await client.connect()
 
 
@@ -25,3 +27,5 @@ for(let i = 0; i < problemArr.length; i++){
 }
 
 client.end()
+}
+seed()

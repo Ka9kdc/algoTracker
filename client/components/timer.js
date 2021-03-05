@@ -1,4 +1,5 @@
 import React from 'react'
+import Problems from './Problem'
 
 class Timer extends React.Component{
     constructor(){
@@ -12,6 +13,7 @@ class Timer extends React.Component{
         }
         this.startTimer = this.startTimer.bind(this)
         this.setSessionLength = this.setSessionLength.bind(this)
+        this.endSession = this.endSession.bind(this)
     }
     
     setSessionLength(evt){
@@ -32,13 +34,15 @@ class Timer extends React.Component{
     tick(){
         let curr = this.state.current
         if(curr === 0){
-            this.setState({running: false})
             clearInterval(this.countdown)
-
         } else {
             curr--
             this.setState({current: curr})
         }
+    }
+
+    endSession(){
+        this.setState({running: false})
     }
 
 
@@ -59,6 +63,7 @@ class Timer extends React.Component{
                     <p>{this.state.start} - {this.state.end}</p>
                     <p>{this.state.sessionLength}</p>
                     <p>{Math.floor(this.state.current/60)}:{this.state.current%60}</p>
+                    <Problems end={this.state.endSession} current={this.state.current}/>
                 </div>
             )
         }

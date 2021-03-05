@@ -1511,8 +1511,8 @@ const problemArr =[[1, 'Two Sum', 'Easy', 1, 4650],
 [573, 'Squirrel Simulation', 'Medium', 1510, 5410],
 [1748, 'Sum of Unique Elements', 'Easy', 1511, 7590],
 [1769, 'Minimum Number of Operations to Move All Balls to Each Box', 'Medium', 1512, 8860],
-[1777, 'Product\'s Price for Each Store  New', 'Easy', 1513, 8650],
-[1772, 'Sort Features by Popularity  New', 'Medium', 1514, 6950],
+[1777, 'Product\'s Price for Each Store', 'Easy', 1513, 8650],
+[1772, 'Sort Features by Popularity', 'Medium', 1514, 6950],
 [1767, 'Find the Subtasks That Did Not Execute', 'Hard', 1515, 8780],
 [1776, 'Car Fleet II', 'Hard', 1516, 4160],
 [1775, 'Equal Sum Arrays With Minimum Number of Operations', 'Medium', 1517, 5040],
@@ -1775,6 +1775,9 @@ const problemArr =[[1, 'Two Sum', 'Easy', 1, 4650],
 [331, 'Verify Preorder Serialization of a Binary Tree', 'Medium', 1774, 4100],
 [320, 'Generalized Abbreviation', 'Medium', 1775, 5380],
 [318, 'Maximum Product of Word Lengths', 'Medium', 1776, 5230],
-[294, 'Flip Game II', 'Medium', 1777, 5070]]
+[294, 'Flip Game II', 'Medium', 1777, 5070],
+[1778, 'Shortest Path in a Hidden Grid','Medium', 1778, 3590]] 
+
+
 
 module.exports = problemArr

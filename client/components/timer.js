@@ -11,7 +11,7 @@ class Timer extends React.Component{
             end: 0,
             running: false,
             tags: [],
-            currentTag: 'Random'
+            currentTag: 'Any'
         }
         this.startTimer = this.startTimer.bind(this)
         this.setSessionLength = this.setSessionLength.bind(this)
@@ -67,7 +67,7 @@ class Timer extends React.Component{
                 <input type="radio" value='60' onClick={this.setSessionLength} name="sessionLength" />60 minutes
                 <input type="radio" value='90' onClick={this.setSessionLength} name="sessionLength" defaultChecked/>90 minutes
                 <select name="tag" value={this.state.currentTag} onChange={this.setTag}>
-                    <option value='Random' name='tag'>Random</option>
+                    <option value='Any' name='tag'>Any</option>
                     {this.state.tags.length && this.state.tags.map(tag => (
                         <option value={tag.tag} name='tag' key={tag.id}>{tag.tag}</option>
                     ))}

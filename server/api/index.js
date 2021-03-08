@@ -16,6 +16,18 @@ router.get('/tags', async(req, res, next) => {
     }
 })
 
+router.get('/any', async (req, res,next) => {
+    try {
+        const data = await client.query('SELECT * FROM problems ORDER BY level ASC LIMIT 15')
+        const algos  = data.rows
+        console.log(algos.length)
+        res.send(algos)
+    } catch (error){
+        console.error()
+        next(error)
+    }
+})
+
 
 router.get('/:tag', async (req, res, next) => {
     try {

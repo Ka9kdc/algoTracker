@@ -2,12 +2,12 @@ import React from 'react'
 
 export const calculateTimeToDisplay = (time) => {
     let hours = (Math.floor(time/ 3600000) + 6)% 24
-    let minites = Math.floor(time/ 60000) % 60
+    let minutes = Math.floor(time/ 60000) % 60
     let seconds = Math.floor(time/ 1000) % 60
     hours = (hours < 10) ? "0" + hours : hours;
-  minutes = (minutes < 10) ? "0" + minutes : minutes;
-  seconds = (seconds < 10) ? "0" + seconds : seconds;
-    return `${hours}:${minites}:${seconds}`
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+    return `${hours}:${minutes}:${seconds}`
 }
 
 class Problems extends React.Component{
@@ -29,7 +29,12 @@ class Problems extends React.Component{
     async componentDidMount(){
         try{
             console.log(this.props.currentTag)
-            const res = await fetch(`/api/${this.props.currentTag}`, {method: 'GET'})
+            let res
+            if(this.props.currentTag === 'Any'){
+                res = await fetch('/api/any', {method: 'GET'})
+            }else{
+                res = await fetch(`/api/${this.props.currentTag}`, {method: 'GET'})
+            }
             const data = await res.json()
             console.log(data)
             let firstProblem = Math.floor(Math.random()*data.length)
@@ -88,13 +93,21 @@ console.log(thisProblem.average_precentile)
         }
         return (
             <div>
+            <div>
                 <h2>{this.state.currentProblem.title}: <a href={`https://leetcode.com/problems/${name}`} target="_blank">Leetcode Link</a></h2>
-                <p>Start Time: {startTime} -  Level: {this.state.currentProblem.difficulty}  -  Acceptance: {this.state.currentProblem.acceptance}  -  Frequency: {this.state.currentProblem.frequency}</p>
+                <p>Start Time: {startTime} -  Level: {this.state.currentProblem.level}  -  Acceptance: {this.state.currentProblem.acceptance}  -  Frequency: {this.state.currentProblem.frequency}</p>
                 <label htmlFor="runtime">Runtime: <input type="Number" value={this.state.currentProblem.runtime} onChange={this.handleChange} name="runtime" /></label>
                 <label htmlFor="runtime_precentile">Runtime %: <input type="Number" value={this.state.currentProblem.runtime_percentile} onChange={this.handleChange} name="runtime_percentile" max="10000" /></label>
                 <label htmlFor="memory">Memory: <input type="Number" value={this.state.currentProblem.memory} onChange={this.handleChange} name="memory" /></label>
                 <label htmlFor="memory_precentile">Memory %: <input type="Number" value={this.state.currentProblem.memory_percentile} onChange={this.handleChange} name="memory_percentile" max="10000" /></label>
                 <button type="submit" onClick={this.handlesubmit}>Submit</button>
+            </div>
+            <div>
+                <p>Number Completed today: {this.state.pastProblems.length}</p>
+                {this.state.pastProblems.length && this.state.pastProblems.map(algo => {
+                    <p>{algo.title} Level: {algo.level}, Time To solve: {algo.time}, Average Percenttile: {algo.average_precentile}</p>
+                })}
+            </div>
             </div>
         )
     }

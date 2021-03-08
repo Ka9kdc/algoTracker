@@ -21,14 +21,12 @@ class Problems extends React.Component{
                 memory: 0,
                 memory_percentile: 0
             },
-            completedproblems: [],
         }
         this.handlesubmit = this.handlesubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
     }
     async componentDidMount(){
         try{
-            console.log(this.props.currentTag)
             let res
             if(this.props.currentTag === 'Any'){
                 res = await fetch('/api/any', {method: 'GET'})
@@ -36,7 +34,6 @@ class Problems extends React.Component{
                 res = await fetch(`/api/${this.props.currentTag}`, {method: 'GET'})
             }
             const data = await res.json()
-            console.log(data)
             let firstProblem = Math.floor(Math.random()*data.length)
             firstProblem = data[firstProblem]
             firstProblem["start"] = new Date().getTime()
@@ -53,7 +50,11 @@ class Problems extends React.Component{
     handleChange(evt){
         console.log(evt.target.name, evt.target.value, typeof evt.target.value)
         const currentProblem = this.state.currentProblem
-        currentProblem[evt.target.name] = parseInt(evt.target.value)
+        if(evt.target.value !== '' && parseInt(evt.target.value) !== NaN){
+            currentProblem[evt.target.name] = parseInt(evt.target.value)
+        } else {
+            currentProblem[evt.target.name] = 0
+        }
         this.setState({currentProblem: currentProblem})
     }
 
@@ -65,8 +66,6 @@ class Problems extends React.Component{
         thisProblem['average_precentile'] = Math.floor((thisProblem.runtime_percentile+thisProblem.memory_percentile)/2)
 console.log(thisProblem.average_precentile)
 
-        const pastProblems = this.state.completedproblems
-        pastProblems.push(thisProblem)
         if(this.props.current > 60){
             const num = Math.floor(Math.random()*this.state.problemArr.length)
             const nextProblem = this.state.problemArr[num]
@@ -75,11 +74,15 @@ console.log(thisProblem.average_precentile)
             nextProblem['runtime_percentile'] = 0
             nextProblem['memory'] = 0
             nextProblem['memory_percentile'] = 0
-            this.setState({currentProblem: nextProblem, completedproblems: pastProblems})
+            console.log(nextProblem)
+            this.setState({currentProblem: nextProblem})
         } else {
-            this.setState({completedproblems: pastProblems})
             this.props.endSession()
         }
+
+        const pastProblems = this.props.completedproblems
+        pastProblems.push(thisProblem)
+        this.props.updateCompletedProblems(pastProblems)
     }
 
     render(){
@@ -93,7 +96,6 @@ console.log(thisProblem.average_precentile)
         }
         return (
             <div>
-            <div>
                 <h2>{this.state.currentProblem.title}: <a href={`https://leetcode.com/problems/${name}`} target="_blank">Leetcode Link</a></h2>
                 <p>Start Time: {startTime} -  Level: {this.state.currentProblem.level}  -  Acceptance: {this.state.currentProblem.acceptance}  -  Frequency: {this.state.currentProblem.frequency}</p>
                 <label htmlFor="runtime">Runtime: <input type="Number" value={this.state.currentProblem.runtime} onChange={this.handleChange} name="runtime" /></label>
@@ -101,13 +103,6 @@ console.log(thisProblem.average_precentile)
                 <label htmlFor="memory">Memory: <input type="Number" value={this.state.currentProblem.memory} onChange={this.handleChange} name="memory" /></label>
                 <label htmlFor="memory_precentile">Memory %: <input type="Number" value={this.state.currentProblem.memory_percentile} onChange={this.handleChange} name="memory_percentile" max="10000" /></label>
                 <button type="submit" onClick={this.handlesubmit}>Submit</button>
-            </div>
-            <div>
-                <p>Number Completed today: {this.state.pastProblems.length}</p>
-                {this.state.pastProblems.length && this.state.pastProblems.map(algo => {
-                    <p>{algo.title} Level: {algo.level}, Time To solve: {algo.time}, Average Percenttile: {algo.average_precentile}</p>
-                })}
-            </div>
             </div>
         )
     }

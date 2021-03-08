@@ -7,16 +7,11 @@ class Timer extends React.Component{
         this.state = {
             sessionLength: 90,
             start: 0,
-            current: 0,
             end: 0,
-            running: false,
             tags: [],
-            currentTag: 'Any'
         }
         this.startTimer = this.startTimer.bind(this)
         this.setSessionLength = this.setSessionLength.bind(this)
-        this.endSession = this.endSession.bind(this)
-        this.setTag = this.setTag.bind(this)
     }
     async componentDidMount(){
        const res = await fetch('/api/tags', {method: 'GET'})
@@ -31,42 +26,27 @@ class Timer extends React.Component{
         }
     }
 
-    setTag(evt){
-        this.setState({currentTag: evt.target.value})
-    }
+    
 
     startTimer(){
         const now = new Date().getTime()
         const curr = this.state.sessionLength*60
         const stop = new Date().getTime()+curr
-        this.setState({start: now, current: curr, end: stop, running: true})
-        this.countdown = setInterval(() => this.tick(), 1000)
+        this.props.startSession(curr)
+        this.setState({start: now, end: stop})
     }
     
-    tick(){
-        let curr = this.state.current
-        if(curr === 0){
-            clearInterval(this.countdown)
-        } else {
-            curr--
-            this.setState({current: curr})
-        }
-    }
-
-    endSession(){
-        this.setState({running: false})
-    }
-
+    
 
     render(){
-        if(!this.state.running){
+        if(!this.props.running){
             return (
             <div>
                 <input type="radio" value='30' onClick={this.setSessionLength} name="sessionLength" />15 minutes
                 <input type="radio" value='30' onClick={this.setSessionLength} name="sessionLength" />30 minutes
                 <input type="radio" value='60' onClick={this.setSessionLength} name="sessionLength" />60 minutes
                 <input type="radio" value='90' onClick={this.setSessionLength} name="sessionLength" defaultChecked/>90 minutes
-                <select name="tag" value={this.state.currentTag} onChange={this.setTag}>
+                <select name="tag" value={this.props.currentTag} onChange={this.props.setTag}>
                     <option value='Any' name='tag'>Any</option>
                     {this.state.tags.length && this.state.tags.map(tag => (
                         <option value={tag.tag} name='tag' key={tag.id}>{tag.tag}</option>
@@ -82,8 +62,7 @@ class Timer extends React.Component{
                 <div>
                     <p>{start} - {end}</p>
                     <p>{this.state.sessionLength}</p>
-                    <p>{Math.floor(this.state.current/60)}:{this.state.current%60}</p>
-                    <Problems end={this.state.endSession} current={this.state.current} currentTag={this.state.currentTag}/>
+                    <p>{Math.floor(this.props.current/60)}:{this.props.current%60}</p>
                 </div>
             )
         }

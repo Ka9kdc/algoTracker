@@ -1,12 +1,11 @@
 import React from 'react'
-import Timer from './timer'
+import AlgoSession from './AlgoSession'
 
 
 const Main = () => {
     return (
         <div>
-          <Timer />
-          <p> hello</p> 
+          <AlgoSession />
         </div>
     )
 }

@@ -1,5 +1,15 @@
 import React from 'react'
 
+export const calculateTimeToDisplay = (time) => {
+    let hours = (Math.floor(time/ 3600000) + 6)% 24
+    let minites = Math.floor(time/ 60000) % 60
+    let seconds = Math.floor(time/ 1000) % 60
+    hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+    return `${hours}:${minites}:${seconds}`
+}
+
 class Problems extends React.Component{
     constructor(){
         super()
@@ -23,7 +33,6 @@ class Problems extends React.Component{
             const data = await res.json()
             console.log(data)
             let firstProblem = Math.floor(Math.random()*data.length)
-            console.log(firstProblem)
             firstProblem = data[firstProblem]
             firstProblem["start"] = new Date().getTime()
             firstProblem['runtime'] = 0
@@ -54,14 +63,14 @@ console.log(thisProblem.average_precentile)
         const pastProblems = this.state.completedproblems
         pastProblems.push(thisProblem)
         if(this.props.current > 60){
-        const num = Math.floor(Math.random()*this.state.problemArr.length)
-        const nextProblem = this.state.problemArr[num]
-        nextProblem['start'] = new Date().getTime()
-        nextProblem['runtime'] = 0
-        nextProblem['runtime_percentile'] = 0
-        nextProblem['memory'] = 0
-        nextProblem['memory_percentile'] = 0
-        this.setState({currentProblem: nextProblem, completedproblems: pastProblems})
+            const num = Math.floor(Math.random()*this.state.problemArr.length)
+            const nextProblem = this.state.problemArr[num]
+            nextProblem['start'] = new Date().getTime()
+            nextProblem['runtime'] = 0
+            nextProblem['runtime_percentile'] = 0
+            nextProblem['memory'] = 0
+            nextProblem['memory_percentile'] = 0
+            this.setState({currentProblem: nextProblem, completedproblems: pastProblems})
         } else {
             this.setState({completedproblems: pastProblems})
             this.props.endSession()
@@ -73,10 +82,14 @@ console.log(thisProblem.average_precentile)
         if(this.state.currentProblem.title){
             name = this.state.currentProblem.title.toLowerCase().split(" ").join("-")
         }
+        let startTime; 
+        if(this.state.currentProblem.start){
+            startTime = calculateTimeToDisplay(this.state.currentProblem.start)
+        }
         return (
             <div>
                 <h2>{this.state.currentProblem.title}: <a href={`https://leetcode.com/problems/${name}`} target="_blank">Leetcode Link</a></h2>
-                <p>Start Time: {this.state.currentProblem.start}  -  Level: {this.state.currentProblem.difficulty}  -  Acceptance: {this.state.currentProblem.acceptance}  -  Frequency: {this.state.currentProblem.frequency}</p>
+                <p>Start Time: {startTime} -  Level: {this.state.currentProblem.difficulty}  -  Acceptance: {this.state.currentProblem.acceptance}  -  Frequency: {this.state.currentProblem.frequency}</p>
                 <label htmlFor="runtime">Runtime: <input type="Number" value={this.state.currentProblem.runtime} onChange={this.handleChange} name="runtime" /></label>
                 <label htmlFor="runtime_precentile">Runtime %: <input type="Number" value={this.state.currentProblem.runtime_percentile} onChange={this.handleChange} name="runtime_percentile" max="10000" /></label>
                 <label htmlFor="memory">Memory: <input type="Number" value={this.state.currentProblem.memory} onChange={this.handleChange} name="memory" /></label>

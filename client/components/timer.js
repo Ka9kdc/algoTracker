@@ -1,5 +1,5 @@
 import React from 'react'
-import Problems from './Problem'
+import Problems, { calculateTimeToDisplay } from './Problem'
 
 class Timer extends React.Component{
     constructor(){
@@ -76,9 +76,11 @@ class Timer extends React.Component{
             </div>
             )
         } else {
+            let start = calculateTimeToDisplay(this.state.start)
+            let end = calculateTimeToDisplay(this.state.end)
             return (
                 <div>
-                    <p>{this.state.start} - {this.state.end}</p>
+                    <p>{start} - {end}</p>
                     <p>{this.state.sessionLength}</p>
                     <p>{Math.floor(this.state.current/60)}:{this.state.current%60}</p>
                     <Problems end={this.state.endSession} current={this.state.current} currentTag={this.state.currentTag}/>

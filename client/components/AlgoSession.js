@@ -22,6 +22,7 @@ class AlgoSession extends React.Component{
         let curr = this.state.current
         if(curr === 0){
             clearInterval(this.countdown)
+            alert('Timer finished')
         } else {
             curr--
             this.setState({current: curr})
@@ -30,7 +31,7 @@ class AlgoSession extends React.Component{
 
     startSession(curr){
         this.setState({running:true, current: curr})
-        this.countdown = setInterval(() => this.tick(), 1000)
+        this.countdown = setInterval(() => this.tick(), 100)
     }
 
     setTag(evt){
@@ -41,8 +42,9 @@ class AlgoSession extends React.Component{
         this.setState({completedproblems: doneAlgoArr})
     }
 
-    endSession(){
+    async endSession(){
         this.setState({running: false})
+        await fetch('/api/completedProblems', {method: 'POST', body: this.state.completedproblems})
     }
     render(){
         return (

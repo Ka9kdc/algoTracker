@@ -29,9 +29,11 @@ class Timer extends React.Component{
     
 
     startTimer(){
-        const now = new Date().getTime()
+        const now = new Date()
         const curr = this.state.sessionLength*60
-        const stop = new Date().getTime()+curr
+        const stopTime = now.getTime() + (curr*1000)
+        const stop = calculateTimeToDisplay(stopTime)
+        console.log(stop)
         this.props.startSession(curr)
         this.setState({start: now, end: stop})
     }
@@ -42,7 +44,7 @@ class Timer extends React.Component{
         if(!this.props.running){
             return (
             <div>
-                <input type="radio" value='30' onClick={this.setSessionLength} name="sessionLength" />15 minutes
+                <input type="radio" value='15' onClick={this.setSessionLength} name="sessionLength" />15 minutes
                 <input type="radio" value='30' onClick={this.setSessionLength} name="sessionLength" />30 minutes
                 <input type="radio" value='60' onClick={this.setSessionLength} name="sessionLength" />60 minutes
                 <input type="radio" value='90' onClick={this.setSessionLength} name="sessionLength" defaultChecked/>90 minutes
@@ -56,11 +58,9 @@ class Timer extends React.Component{
             </div>
             )
         } else {
-            let start = calculateTimeToDisplay(this.state.start)
-            let end = calculateTimeToDisplay(this.state.end)
             return (
                 <div>
-                    <p>{start} - {end}</p>
+                    <p>{this.state.start.toTimeString()} - {this.state.end}</p>
                     <p>{this.state.sessionLength}</p>
                     <p>{Math.floor(this.props.current/60)}:{this.props.current%60}</p>
                 </div>

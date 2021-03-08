@@ -44,10 +44,10 @@ const createTracker = `CREATE TABLE IF NOT EXISTS tracker(
     average_precentile INTEGER NOT NULL
 );`
 try {
-await client.query(createProblemsTable)
-await client.query(createTagssTable)
-await client.query(createAlgoTaggedTable)
-await client.query(createTracker)
+    await client.query(createProblemsTable)
+    await client.query(createTagssTable)
+    await client.query(createAlgoTaggedTable)
+    await client.query(createTracker)
 } catch (err) {
     console.error(err.stack)
 }

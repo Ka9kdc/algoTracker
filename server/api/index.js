@@ -36,5 +36,20 @@ router.get('/:tag', async (req, res, next) => {
     }
 })
 
+router.post('/completedProblems', async(req, res, next) => {
+    try {
+        const algos = req.body.completedProblems
+        if(algos.length){
+            const query = 'INSERT INTO tracker (time, algo_id, runtime, runtime_precentile, memory, memory_precentile, date, average_precentile) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);'
+            for(let i = 0; i < algos.length; i++){
+                const data =[algos[i].time, algos[i].id, algos[i].runtime, algos[i].runtime_precentile, algos[i].memory, algos[i].memory_precentile, algos[i].date, algos[i].average_precentile]
+                await client.query(query, data)
+            }
+        }
+        res.sendStatus(204)
+    } catch (error) {
+        next(error)
+    }
+})
 
 module.exports = router

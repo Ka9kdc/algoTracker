@@ -35,7 +35,7 @@ const createAlgoTaggedTable = `CREATE TABLE IF NOT EXISTS algoTagged(
 const createTracker = `CREATE TABLE IF NOT EXISTS tracker(
     id  SERIAL PRIMARY KEY,
     time INTEGER NOT NULL,
-    aglo_id INTEGER REFERENCES problems (id) NOT NULL,
+    algo_id INTEGER REFERENCES problems (id) NOT NULL,
     runtime INTEGER NOT NULL,
     runtime_precentile INTEGER NOT NULL,
     memory INTEGER NOT NULL,

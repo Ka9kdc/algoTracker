@@ -63,10 +63,20 @@ class Problems extends React.Component{
         thisProblem['date'] = new Date()
         thisProblem['time'] = thisProblem.date.getTime() - thisProblem.start
         thisProblem['average_precentile'] = Math.floor((thisProblem.runtime_percentile+thisProblem.memory_percentile)/2)
+        
+        const pastProblems = this.props.completedproblems
+        pastProblems.push(thisProblem)
+        this.props.updateCompletedProblems(pastProblems)
 
         if(this.props.current > 60){
-            const num = Math.floor(Math.random()*this.state.problemArr.length)
-            const nextProblem = this.state.problemArr[num]
+            let num = Math.floor(Math.random()*this.state.problemArr.length)
+            let nextProblem = this.state.problemArr[num]
+            let alreadyCompleted = pastProblems.filter(algo => algo.id === nextProblem.id)
+            while(alreadyCompleted.length){
+                num = Math.floor(Math.random()*this.state.problemArr.length)
+                 nextProblem = this.state.problemArr[num]
+                 pastProblems.filter(algo => algo.id === nextProblem.id)
+            }
             nextProblem['start'] = new Date().getTime()
             nextProblem['runtime'] = 0
             nextProblem['runtime_percentile'] = 0
@@ -77,9 +87,7 @@ class Problems extends React.Component{
             this.props.endSession()
         }
 
-        const pastProblems = this.props.completedproblems
-        pastProblems.push(thisProblem)
-        this.props.updateCompletedProblems(pastProblems)
+        
     }
 
     render(){

@@ -31,7 +31,7 @@ class AlgoSession extends React.Component{
 
     startSession(curr){
         this.setState({running:true, current: curr})
-        this.countdown = setInterval(() => this.tick(), 100)
+        this.countdown = setInterval(() => this.tick(), 1000)
     }
 
     setTag(evt){
@@ -44,7 +44,8 @@ class AlgoSession extends React.Component{
 
     async endSession(){
         this.setState({running: false})
-        await fetch('/api/completedProblems', {method: 'POST', body: this.state.completedproblems})
+        const data = {completedProblems: this.state.completedproblems}
+        await fetch('/api/completedProblems', {method: 'POST',  headers:{'Content-Type': 'application/json'}, body: JSON.stringify(data)})
     }
     render(){
         return (

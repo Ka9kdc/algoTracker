@@ -12,7 +12,6 @@ for(let i = 0; i < algoTagAssociations.length; i++){
         await client.query(insertStatement2, algoTagAssociations[i])
         
     } catch (err) {
-        console.log(algoTagAssociations[i])
         console.error(err.stack)
     }
 }

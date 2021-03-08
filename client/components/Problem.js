@@ -48,7 +48,6 @@ class Problems extends React.Component{
     }
 
     handleChange(evt){
-        console.log(evt.target.name, evt.target.value, typeof evt.target.value)
         const currentProblem = this.state.currentProblem
         if(evt.target.value !== '' && parseInt(evt.target.value) !== NaN){
             currentProblem[evt.target.name] = parseInt(evt.target.value)
@@ -64,7 +63,6 @@ class Problems extends React.Component{
         thisProblem['date'] = new Date()
         thisProblem['time'] = thisProblem.date.getTime() - thisProblem.start
         thisProblem['average_precentile'] = Math.floor((thisProblem.runtime_percentile+thisProblem.memory_percentile)/2)
-console.log(thisProblem.average_precentile)
 
         if(this.props.current > 60){
             const num = Math.floor(Math.random()*this.state.problemArr.length)
@@ -74,7 +72,6 @@ console.log(thisProblem.average_precentile)
             nextProblem['runtime_percentile'] = 0
             nextProblem['memory'] = 0
             nextProblem['memory_percentile'] = 0
-            console.log(nextProblem)
             this.setState({currentProblem: nextProblem})
         } else {
             this.props.endSession()

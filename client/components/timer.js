@@ -1,5 +1,5 @@
 import React from 'react'
-import Problems, { calculateTimeToDisplay } from './Problem'
+import { calculateTimeToDisplay } from './Problem'
 
 class Timer extends React.Component{
     constructor(){

@@ -18,7 +18,7 @@ app.get('*', (req, res) => {
 })
 
 app.use((error,req,res,next) => {
-    console.log(error.message)
+    console.error(error.message)
     res.send(error)
 })
 

@@ -11,7 +11,7 @@ const client = new Client({
 const seed = async () => {
     await client.connect()
     
-await client.query(`DROP TABLE IF EXISTS  algoTagged, problems, tags CASCADE;`)
+await client.query(`DROP TABLE IF EXISTS  algoTagged, problems, tags,tracker, study_sessions, algo_sessions CASCADE;`)
 
 const createProblemsTable = `CREATE TABLE IF NOT EXISTS problems(
     id INTEGER PRIMARY KEY,
@@ -43,20 +43,24 @@ const createTracker = `CREATE TABLE IF NOT EXISTS tracker(
     date timestamp with time zone NOT NULL,
     average_precentile INTEGER NOT NULL
 );`
+
 const createStudySessions = `CREATE TABLE IF NOT EXISTS study_sessions(
     id SERIAL PRIMARY KEY,
-    start timestamp with time zone NOT NULL,
-    end timestamp with time zone NOT NULL,
+    session_start timestamp with time zone NOT NULL,
+    session_end timestamp with time zone NOT NULL,
     algo_count INTEGER NOT NULL,
     duration INTEGER NOT NULL,
-)`
+    tag VARCHAR(50) NOT NULL
+);`
 const createAlgoSessions = `CREATE TABLE IF NOT EXISTS algo_sessions(
     session_id INTEGER REFERENCES study_sessions (id) NOT NULL,
     algo_id INTEGER REFERENCES problems (id) NOT NULL,
     tracker_id INTEGER REFERENCES tracker (id) NOT NULL,
-    average_precentile INTEGER REFERENCES tracker (average_precentile) NOT NULL,
-    best BOOLEEN,
-)`
+    best BOOLEAN DEFAULT TRUE NOT NULL,
+    average_precentile INTEGER NOT NULL,
+    passing BOOLEAN GENERATED ALWAYS AS ( average_precentile > 5000 ) STORED
+);`
+
 try {
     await client.query(createProblemsTable)
     await client.query(createTagssTable)

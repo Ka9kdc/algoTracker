@@ -40,15 +40,14 @@ router.post('/completedProblems', async(req, res, next) => {
     try {
         const studySession = req.body.studySession
         const algos = req.body.completedProblems
-        const now = new Date()
         if(algos.length){
-            const sessionQuery = await client.query('INSERT INTO study_sessions (session_start, session_end, algo_count, duration, tag) VALUES ($1, $2, $3, $4, $5) RETURNING id;', [now,now,algos.length,studySession.sessionLength,studySession.tag])
+            const sessionQuery = await client.query('INSERT INTO study_sessions (session_start, session_end, algo_count, duration, tag) VALUES ($1, $2, $3, $4, $5) RETURNING id;', [studySession.start, studySession.end,algos.length,studySession.sessionLength,studySession.tag])
             const session_id = sessionQuery.rows[0].id
             const queryTracker = 'INSERT INTO tracker (time, algo_id, runtime, runtime_precentile, memory, memory_precentile, date, average_precentile) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;'
             const queryBest = 'SELECT tracker.average_precentile, tracker.id FROM tracker, algo_sessions WHERE algo_sessions.best = TRUE AND algo_sessions.algo_id = ($1) AND algo_sessions.tracker_id = tracker.id'
             const insertFirstTime = 'INSERT INTO algo_sessions (session_id, algo_id, tracker_id, average_precentile) VALUES ($1, $2, $3, $4);'
             for(let i = 0; i < algos.length; i++){
-                const data = [algos[i].time, algos[i].id, algos[i].runtime, algos[i].runtime_percentile, algos[i].memory, algos[i].memory_percentile, now, algos[i].average_precentile]
+                const data = [algos[i].time, algos[i].id, algos[i].runtime, algos[i].runtime_percentile, algos[i].memory, algos[i].memory_percentile, algos[i].date, algos[i].average_precentile]
                 const trackerResult = await client.query(queryTracker, data)
                 const tracker_id = trackerResult.rows[0].id
 

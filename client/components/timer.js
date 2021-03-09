@@ -33,7 +33,6 @@ class Timer extends React.Component{
         const curr = this.state.sessionLength*60
         const stopTime = now.getTime() + (curr*1000)
         const stop = calculateTimeToDisplay(stopTime)
-        console.log(stop)
         this.props.startSession(curr)
         this.setState({start: now, end: stop})
     }

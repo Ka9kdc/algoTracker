@@ -43,11 +43,27 @@ const createTracker = `CREATE TABLE IF NOT EXISTS tracker(
     date timestamp with time zone NOT NULL,
     average_precentile INTEGER NOT NULL
 );`
+const createStudySessions = `CREATE TABLE IF NOT EXISTS study_sessions(
+    id SERIAL PRIMARY KEY,
+    start timestamp with time zone NOT NULL,
+    end timestamp with time zone NOT NULL,
+    algo_count INTEGER NOT NULL,
+    duration INTEGER NOT NULL,
+)`
+const createAlgoSessions = `CREATE TABLE IF NOT EXISTS algo_sessions(
+    session_id INTEGER REFERENCES study_sessions (id) NOT NULL,
+    algo_id INTEGER REFERENCES problems (id) NOT NULL,
+    tracker_id INTEGER REFERENCES tracker (id) NOT NULL,
+    average_precentile INTEGER REFERENCES tracker (average_precentile) NOT NULL,
+    best BOOLEEN,
+)`
 try {
     await client.query(createProblemsTable)
     await client.query(createTagssTable)
     await client.query(createAlgoTaggedTable)
     await client.query(createTracker)
+    await client.query(createStudySessions)
+    await client.query(createAlgoSessions)
 } catch (err) {
     console.error(err.stack)
 }

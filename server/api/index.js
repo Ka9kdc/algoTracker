@@ -7,7 +7,7 @@ const client = require('../db')
 
 router.get('/tags', async(req, res, next) => {
     try{
-        const data = await client.query('SELECT * FROM tags;')
+        const data = await client.query('SELECT * FROM tags ORDER BY tag;')
         const tags = data.rows
         res.send(tags)
     }catch (error){

@@ -43,7 +43,7 @@ class AlgoSession extends React.Component{
          const curr = this.state.sessionLength*60
          const stopTime = now.getTime() + (curr*1000)
          const stop = calculateTimeToDisplay(stopTime)
-         this.setState({start: now, end: stop, running:true, current: curr})
+         this.setState({start: now, end: stop, running:true, current: curr,  completedproblems: []})
          this.countdown = setInterval(() => this.tick(), 100)
      }
 
@@ -57,7 +57,6 @@ class AlgoSession extends React.Component{
             this.setState({current: curr})
         }
     }
-
 
     setTag(evt){
         this.setState({currentTag: evt.target.value})
